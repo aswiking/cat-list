@@ -1,32 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import cuid from "cuid";
 import Cat from "./cat";
 import CatForm from "./cat-form";
-import FatCat from "./fat-cat.jpg";
-import Susu from "./Susu.jpeg";
-import Saga from "./saga.jpg";
 
 export default function CatList() {
-  const [catData, setCat] = useState([
-    { id: 1, name: "Jeff", size: "Chonk", mood: "Lazy", imageLocation: FatCat, isEditing: false },
-    { id: 2, name: "Susu", size: "Smol", mood: "Friend", imageLocation: Susu },
-    { id: 3, name: "Saga", size: "Chonk", mood: "Grumpy", imageLocation: Saga }
-  ]);
+  const [catData, setCat] = useState([]);
 
-  function submitCat(event) {
+  useEffect(() => {
+    async function fetchCats() {
+      const res = await fetch("/api/cats");
+      const cats = await res.json();
+      setCat(cats);
+    }
+    fetchCats();
+  }, []);
+
+  async function submitCat(event) {
     event.preventDefault();
-    setCat([
-      ...catData,
-      {
-        id: cuid(),
-        name: event.target.name.value,
-        size: event.target.size.value,
-        mood: event.target.mood.value,
-        imageLocation: event.target.image.value,
-        isEditing: false
-      }
-    ]);
+    const newCat = {
+      id: cuid(),
+      name: event.target.name.value,
+      size: event.target.size.value,
+      mood: event.target.mood.value,
+      imageLocation: event.target.image.value
+    };
     event.target.reset();
+
+    const url = "/api/cats";
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newCat)
+    });
+    const cat = await res.json();
+    setCat([...catData, cat]);
   }
 
   const [checked, setChecked] = useState({ size: undefined, mood: undefined });
@@ -77,16 +87,18 @@ export default function CatList() {
     setChecked({ size: undefined, mood: undefined });
   }
 
-  const catList = catData.map(cat => (
-    <Cat
-      cat={cat}
-      editCat={editCat}
-      discardCat={discardCat}
-      updateCat={updateCat}
-      check={check}
-      checked={checked}
-    />
-  ));
+  const catList = catData.map(cat => {
+    return (
+      <Cat
+        cat={cat}
+        editCat={editCat}
+        discardCat={discardCat}
+        updateCat={updateCat}
+        check={check}
+        checked={checked}
+      />
+    );
+  });
 
   return (
     <div>
@@ -96,7 +108,7 @@ export default function CatList() {
         check={check}
         checked={checked}
         resetForm={resetForm}
-        formType='addCat'
+        formType="addCat"
       />
     </div>
   );

@@ -10,22 +10,22 @@ export default function CatForm(props) {
        
       )}
       <form
-        onSubmit={() => {
-          props.submitCat();
-          props.resetForm();
+        onSubmit={(event) => {
+          props.submitCat(event);
+          props.resetForm(event);
         }}
       >
         <label htmlFor="name">Name</label> <input type="text" id="name"></input>
         <div>
           <label htmlFor="size">Size</label>
           <div id="size">
-            <label htmlFor="chonk">Chonk</label>{" "}
+            <label htmlFor="chonk">Chongk</label>{" "}
             <input
               type="radio"
               id="chonk"
               value="chonk"
               name="size"
-              checked={props.checked.size === "Chonk"}
+              checked={props.checked.size === "chonk"}
               onChange={props.check}
             ></input>
             <label htmlFor="smol">Smol</label>{" "}
@@ -64,9 +64,9 @@ export default function CatForm(props) {
             <input
               type="radio"
               id="lazy"
-              value="grumpy"
+              value="lazy"
               name="mood"
-              checked={props.checked.mood === "Lazy"}
+              checked={props.checked.mood === "lazy"}
               onChange={props.check}
             ></input>
           </div>
@@ -83,77 +83,3 @@ export default function CatForm(props) {
     </div>
   );
 }
-
-/*    return (
-      <div>
-        <h2>{props.cat.name}</h2>
-        <div>
-          <button onClick={() => props.discardCat(props.cat.id)}>Discard cat</button>
-        </div>
-        <form onSubmit={event => props.updateCat(event, props.cat.id)}>
-          <div>
-            <label htmlFor="size">Size</label>
-            <div id="size">
-              <label htmlFor="chonk">Chonk</label>{" "}
-              <input
-                type="radio"
-                id="chonk"
-                value="chonk"
-                name="size"
-                checked={props.cat.size === "Chonk"}
-                onChange={props.check}
-              ></input>
-              <label htmlFor="smol">Smol</label>{" "}
-              <input
-                type="radio"
-                id="smol"
-                value="smol"
-                name="size"
-                checked={props.cat.size === "Smol"}
-                onChange={props.check}
-              ></input>
-            </div>
-          </div>
-          <div>
-            <label htmlFor="mood">Mood</label>
-            <div id="mood">
-              <label htmlFor="grumpy">Grumpy</label>{" "}
-              <input
-                type="radio"
-                id="grumpy"
-                value="grumpy"
-                name="mood"
-                checked={props.cat.mood === "Grumpy"}
-                onChange={props.check}
-              ></input>
-              <label htmlFor="friendly">Friendly</label>{" "}
-              <input
-                type="radio"
-                id="friendly"
-                value="friendly"
-                name="mood"
-                checked={props.cat.mood === "Friendly"}
-                onChange={props.check}
-              ></input>
-              <label htmlFor="grumpy">Lazy</label>{" "}
-              <input
-                type="radio"
-                id="lazy"
-                value="lazy"
-                name="mood"
-                checked={props.cat.mood === "Lazy"}
-                onChange={props.check}
-              ></input>
-            </div>
-          </div>
-          <label htmlFor="image">Image url</label>{" "}
-          <input
-            type="text"
-            id="image"
-            defaultValue={props.cat.imageLocation}
-          ></input>
-          <br></br>
-          <button>Submit cat</button>
-        </form>
-      </div>
-    ); */
