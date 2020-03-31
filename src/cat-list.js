@@ -65,17 +65,31 @@ export default function CatList() {
     );
   }
 
-  function updateCat(event, id) {
+  async function updateCat(event, id) {
+    const updatedCat = {
+      id: id,
+      name: event.target.name.value,
+      size: event.target.size.value,
+      mood: event.target.mood.value,
+      imageLocation: event.target.image.value
+    };
+
+    const url = `/api/cats/${id}`;
+
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(updatedCat)
+    });
+    const cat = await res.json();
+    console.log(cat);
+
     setCat(
       catData.map(cat => {
         if (cat.id === id) {
-          return {
-            id: cat.id,
-            name: cat.name,
-            size: event.target.size.value,
-            mood: event.target.mood.value,
-            imageLocation: event.target.image.value
-          };
+          return updatedCat;
         } else {
           return cat;
         }
