@@ -39,10 +39,7 @@ export default function CatList() {
     setCat([...catData, cat]);
   }
 
-  const [checked, setChecked] = useState({ size: undefined, mood: undefined });
-  function check(event) {
-    setChecked({ ...checked, [event.target.name]: event.target.value });
-  }
+
 
   function editCat(event, id) {
     setCat(
@@ -56,8 +53,15 @@ export default function CatList() {
     );
   }
 
-  function discardCat(id) {
+  async function discardCat(id) {
     console.log(id);
+    const url = `/api/cats/${id}`;
+    const res = await fetch(url, {
+        method: "DELETE",
+        headers: {
+            "Content-type": "application/json"
+        }
+    })
     setCat(
       catData.filter(cat => {
         return id !== cat.id;
@@ -65,10 +69,12 @@ export default function CatList() {
     );
   }
 
-  async function updateCat(event, id) {
+  async function updateCat(event, id, name) {
+      console.log(event.target.size.value)
+      event.preventDefault();
     const updatedCat = {
       id: id,
-      name: event.target.name.value,
+      name: name,
       size: event.target.size.value,
       mood: event.target.mood.value,
       imageLocation: event.target.image.value
@@ -97,9 +103,7 @@ export default function CatList() {
     );
   }
 
-  function resetForm() {
-    setChecked({ size: undefined, mood: undefined });
-  }
+
 
   const catList = catData.map(cat => {
     return (
@@ -108,8 +112,6 @@ export default function CatList() {
         editCat={editCat}
         discardCat={discardCat}
         updateCat={updateCat}
-        check={check}
-        checked={checked}
       />
     );
   });
@@ -119,9 +121,6 @@ export default function CatList() {
       {catList}
       <CatForm
         submitCat={submitCat}
-        check={check}
-        checked={checked}
-        resetForm={resetForm}
         formType="addCat"
       />
     </div>

@@ -1,21 +1,29 @@
 import React from "react";
 
+
+
 export default function CatForm(props) {
+
+
   return (
     <div>
       <h2>{props.formType === "addCat" ? "Add cat" : props.cat.name}</h2>
       {props.formType === "editCat" && (
-      
-          <button onClick={() => props.discardCat(props.cat.id)} >Discard cat</button>
-       
+        <button onClick={() => props.discardCat(props.cat.id)}>
+          Discard cat
+        </button>
       )}
       <form
-        onSubmit={(event) => {
-          props.submitCat(event);
-          props.resetForm(event);
+        onSubmit={event => {
+          props.submitCat(event, props.cat.id, props.cat.name);
         }}
       >
-        <label htmlFor="name">Name</label> <input type="text" id="name"></input>
+        {props.formType === "addCat" && (
+          <div>
+            <label htmlFor="name">Name</label>{" "}
+            <input type="text" id="name"></input>
+          </div>
+        )}
         <div>
           <label htmlFor="size">Size</label>
           <div id="size">
@@ -25,8 +33,7 @@ export default function CatForm(props) {
               id="chonk"
               value="chonk"
               name="size"
-              checked={props.checked.size === "chonk"}
-              onChange={props.check}
+              defaultChecked={props.cat.size === "chonk"}
             ></input>
             <label htmlFor="smol">Smol</label>{" "}
             <input
@@ -34,8 +41,7 @@ export default function CatForm(props) {
               id="smol"
               value="smol"
               name="size"
-              checked={props.checked.size === "smol"}
-              onChange={props.check}
+              defaultChecked={props.cat.size === "smol"}
             ></input>
           </div>
         </div>
@@ -48,8 +54,7 @@ export default function CatForm(props) {
               id="grumpy"
               value="grumpy"
               name="mood"
-              checked={props.checked.mood === "grumpy"}
-              onChange={props.check}
+              defaultChecked={props.cat.mood === "grumpy"}
             ></input>
             <label htmlFor="friendly">Friendly</label>{" "}
             <input
@@ -57,8 +62,7 @@ export default function CatForm(props) {
               id="friendly"
               value="friendly"
               name="mood"
-              checked={props.checked.mood === "friendly"}
-              onChange={props.check}
+              defaultChecked={props.cat.mood === "friendly"}
             ></input>
             <label htmlFor="lazy">Lazy</label>{" "}
             <input
@@ -66,20 +70,25 @@ export default function CatForm(props) {
               id="lazy"
               value="lazy"
               name="mood"
-              checked={props.checked.mood === "lazy"}
-              onChange={props.check}
+              defaultChecked={props.cat.mood === "lazy"}
             ></input>
           </div>
         </div>
         <label htmlFor="image">Image url</label>{" "}
-        <input
-          type="text"
-          id="image"
-          defaultValue={props.checked.imageLocation}
-        ></input>
+        <input type="text" id="image" defaultValue={props.cat.imageLocation}></input>
         <br></br>
         <button>Submit cat</button>
       </form>
     </div>
   );
 }
+
+CatForm.defaultProps = {
+    cat: {
+        id: "",
+        name: "",
+        size: "",
+        mood: "",
+        imageLocation: ""
+    }
+};

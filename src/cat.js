@@ -26,6 +26,7 @@ export default function Cat(props) {
         checked={props.cat}
         formType="editCat"
         discardCat={props.discardCat}
+        submitCat={props.updateCat}
       />
     );
   }
